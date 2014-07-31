@@ -1,5 +1,8 @@
 package net.nix.clientmod;
+package net.nix.clientmod;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
@@ -26,5 +29,11 @@ public class ClientProxy extends CommonProxy {
         for (String username : owners) {
             Minecraft.getMinecraft().renderEngine.loadTexture(new ResourceLocation("cloaks/" + username), (ITextureObject) image);
         }
+    }
+
+    @Override
+    public void onModInit(FMLInitializationEvent evt) {
+        FMLCommonHandler.instance().bus().register(new TickHandler());
+        super.onModInit(evt);
     }
 }
