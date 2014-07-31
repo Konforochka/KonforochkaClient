@@ -23,7 +23,7 @@ import static net.nix.clientmod.Hlestamod.*;
 public class Hlestamod {
 
     public static final String MODID = "Konforochka's Client Side Tweaks";
-    public static final String VERSION = "summer adventures 2014 edition";
+    public static final String VERSION = "1.0";
 
     @SidedProxy(clientSide = "net.nix.clientmod.ClientProxy", serverSide = "net.nix.clientmod.CommonProxy")
     public static CommonProxy proxy;
@@ -32,13 +32,15 @@ public class Hlestamod {
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
 
-        if (Loader.isModLoaded("gregtech_addon")) {
-            System.err.println("[Hlestamod] DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH");
+        for (ModContainer o : Loader.instance().getModList()) {
+            if (o.getModId().toLowerCase().contains("gregtech"))
+                System.err.println("[Hlestamod] DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH");
         }
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        proxy.onModInit(event);
     }
 
     @EventHandler
