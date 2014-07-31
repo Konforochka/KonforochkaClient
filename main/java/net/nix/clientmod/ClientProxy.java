@@ -1,5 +1,4 @@
 package net.nix.clientmod;
-package net.nix.clientmod;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

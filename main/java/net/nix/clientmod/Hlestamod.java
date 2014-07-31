@@ -17,82 +17,81 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 
+import com.asaskevich.konforochka.LivingEntityKillingHandler;
+import com.asaskevich.konforochka.ReceivedMessageHandler;
+
 import static net.nix.clientmod.Hlestamod.*;
 
 @Mod(modid = MODID, version = VERSION)
 public class Hlestamod {
 
-    public static final String MODID = "Konforochka's Client Side Tweaks";
-    public static final String VERSION = "1.0";
+	public static final String MODID = "Konforochka's Client Side Tweaks";
+	public static final String VERSION = "1.0";
 
-    @SidedProxy(clientSide = "net.nix.clientmod.ClientProxy", serverSide = "net.nix.clientmod.CommonProxy")
-    public static CommonProxy proxy;
+	@SidedProxy(clientSide = "net.nix.clientmod.ClientProxy", serverSide = "net.nix.clientmod.CommonProxy")
+	public static CommonProxy proxy;
 
+	@EventHandler
+	public void preinit(FMLPreInitializationEvent event) {
+		MinecraftForge.EVENT_BUS.register(new ReceivedMessageHandler());
+		MinecraftForge.EVENT_BUS.register(new LivingEntityKillingHandler());
+		for (ModContainer o : Loader.instance().getModList()) {
+			if (o.getModId().toLowerCase().contains("gregtech"))
+				System.err
+						.println("[Hlestamod] DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH");
+		}
+	}
 
-    @EventHandler
-    public void preinit(FMLPreInitializationEvent event) {
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		proxy.onModInit(event);
+	}
 
-        for (ModContainer o : Loader.instance().getModList()) {
-            if (o.getModId().toLowerCase().contains("gregtech"))
-                System.err.println("[Hlestamod] DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH DELETE GREGTECH");
-        }
-    }
+	@EventHandler
+	@SideOnly(Side.CLIENT)
+	public void postInit(FMLPostInitializationEvent event) {
+		Writer writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(Loader.instance().getConfigDir() + "/.OreDictNames.txt"));
+			writer.append("There are listed all registered in game OreDictionary names\n\n");
+			for (String s : OreDictionary.getOreNames()) {
+				for (int i = 0; i < OreDictionary.getOres(s).size(); i++) {
+					writer.append(s + " -- " + OreDictionary.getOres(s).get(i).getDisplayName() + "\n");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {}
+			}
+		}
+	}
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.onModInit(event);
-    }
+	@EventHandler
+	public void load(FMLInitializationEvent event) {
+		ClientProxy.addCapes();
 
-    @EventHandler
-    @SideOnly(Side.CLIENT)
-    public void postInit(FMLPostInitializationEvent event){
-        Writer writer = null;
-        try{
-            writer = new BufferedWriter(new FileWriter(Loader.instance().getConfigDir() + "/.OreDictNames.txt"));
-            writer.append("There are listed all registered in game OreDictionary names\n\n");
-            for(String s : OreDictionary.getOreNames()){
-                for(int i = 0; i < OreDictionary.getOres(s).size(); i++){
-                    writer.append(s + " -- " + OreDictionary.getOres(s).get(i).getDisplayName() + "\n");
-                }
-            }
-        }catch(IOException e){
-            e.printStackTrace();
-        }finally{
-            if(writer != null){
-                try{
-                    writer.close();
-                }catch(IOException e){}
-            }
-        }
-    }
+		for (ModContainer o : Loader.instance().getModList()) {
+			if (o.getModId().toLowerCase().contains("gregtech")) {
+				try {
 
-    @EventHandler
-    public void load(FMLInitializationEvent event) {
-        ClientProxy.addCapes();
+					ModContainer mod = o;
+					Field ann = FMLModContainer.class.getDeclaredField("eventBus");
+					ann.setAccessible(true);
+					com.google.common.eventbus.EventBus googlebus = (com.google.common.eventbus.EventBus) ann.get(mod);
+					googlebus.unregister(mod);
 
-        for (ModContainer o : Loader.instance().getModList())
-        {
-            if (o.getModId().toLowerCase().contains("gregtech"))
-            {
-                try
-                {
-
-                    ModContainer mod = o;
-                    Field ann = FMLModContainer.class.getDeclaredField("eventBus");
-                    ann.setAccessible(true);
-                    com.google.common.eventbus.EventBus googlebus = (com.google.common.eventbus.EventBus) ann.get(mod);
-                    googlebus.unregister(mod);
-
-                    Class clazz = Class.forName("gregtechmod.common.GT_OreDictHandler");
-                    MinecraftForge.EVENT_BUS.unregister(clazz);
-                    System.out.println("[nixhlestakov] Hehehehe!");
-                }
-                catch (Exception e)
-                {
-                    System.err.println("[nixhlestakov] Can't crash GregTech");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+					Class clazz = Class.forName("gregtechmod.common.GT_OreDictHandler");
+					MinecraftForge.EVENT_BUS.unregister(clazz);
+					System.out.println("[nixhlestakov] Hehehehe!");
+				} catch (Exception e) {
+					System.err.println("[nixhlestakov] Can't crash GregTech");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }
