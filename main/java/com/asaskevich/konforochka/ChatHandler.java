@@ -9,12 +9,12 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ReceivedMessageHandler {
+public class ChatHandler {
 
 	private HashMap<String, String> players = new HashMap<String, String>();
 	private HashSet<String> badWords = new HashSet<String>();
 
-	public ReceivedMessageHandler() {
+	public ChatHandler() {
 		// Our players
 		players.put("asaskevich", "§n§l§6");
 		players.put("NixHlestakov", "§n§l§c");
@@ -39,7 +39,7 @@ public class ReceivedMessageHandler {
 			event.setCanceled(true);
 			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(text));
 		} catch (Exception e) {
-			// Something happened
+			System.err.println(e);
 		}
 	}
 }

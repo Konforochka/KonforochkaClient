@@ -8,7 +8,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class LivingEntityKillingHandler {
+public class EntityKillHandler {
 	private Random r = new Random();
 
 	@SubscribeEvent

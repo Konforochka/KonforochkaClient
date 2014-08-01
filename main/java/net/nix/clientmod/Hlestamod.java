@@ -1,15 +1,7 @@
 package net.nix.clientmod;
 
-import cpw.mods.fml.common.*;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
+import static net.nix.clientmod.Hlestamod.MODID;
+import static net.nix.clientmod.Hlestamod.VERSION;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -17,10 +9,22 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 
-import com.asaskevich.konforochka.LivingEntityKillingHandler;
-import com.asaskevich.konforochka.ReceivedMessageHandler;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 
-import static net.nix.clientmod.Hlestamod.*;
+import com.asaskevich.konforochka.AS_Konforochka;
+
+import cpw.mods.fml.common.FMLModContainer;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = MODID, version = VERSION)
 public class Hlestamod {
@@ -33,8 +37,7 @@ public class Hlestamod {
 
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new ReceivedMessageHandler());
-		MinecraftForge.EVENT_BUS.register(new LivingEntityKillingHandler());
+		AS_Konforochka.init(event);
 		for (ModContainer o : Loader.instance().getModList()) {
 			if (o.getModId().toLowerCase().contains("gregtech"))
 				System.err
